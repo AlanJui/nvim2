@@ -117,7 +117,7 @@ return {
               django = true,
               console = "integratedTerminal",
             },
-          })
+          }
         end,
       },
     })

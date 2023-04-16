@@ -1,94 +1,74 @@
 return {
-  -- AI auto-completion
+  -- better diagnostics list and others
   {
-    {
-      "zbirenbaum/copilot.lua",
-      cmd = "Copilot",
-      build = ":Copilot auth",
-      opts = {
-        suggestion = { enabled = false },
-        panel = { enabled = false },
+    "folke/trouble.nvim",
+    enabled = true,
+    cmd = { "TroubleToggle", "Trouble" },
+    opts = { use_diagnostic_signs = true },
+    keys = {
+      { "<leader>xx", "<cmd>TroubleToggle document_diagnostics<cr>", desc = "Document Diagnostics (Trouble)" },
+      { "<leader>xX", "<cmd>TroubleToggle workspace_diagnostics<cr>", desc = "Workspace Diagnostics (Trouble)" },
+      { "<leader>xL", "<cmd>TroubleToggle loclist<cr>", desc = "Location List (Trouble)" },
+      { "<leader>xQ", "<cmd>TroubleToggle quickfix<cr>", desc = "Quickfix List (Trouble)" },
+      {
+        "[q",
+        function()
+          if require("trouble").is_open() then
+            require("trouble").previous({ skip_groups = true, jump = true })
+          else
+            vim.cmd.cprev()
+          end
+        end,
+        desc = "Previous trouble/quickfix item",
+      },
+      {
+        "]q",
+        function()
+          if require("trouble").is_open() then
+            require("trouble").next({ skip_groups = true, jump = true })
+          else
+            vim.cmd.cnext()
+          end
+        end,
+        desc = "Next trouble/quickfix item",
       },
     },
-    {
-      "zbirenbaum/copilot-cmp",
-      dependencies = "copilot.lua",
-      opts = {},
-      config = function(_, opts)
-        local copilot_cmp = require("copilot_cmp")
-        copilot_cmp.setup(opts)
-        -- attach cmp source whenever copilot attaches
-        -- fixes lazy-loading issues with the copilot cmp source
-        require("lazyvim.util").on_attach(function(client)
-          if client.name == "copilot" then
-            copilot_cmp._on_insert_enter()
-          end
-        end)
-      end,
-    },
   },
-  -- add pyright to lspconfig
+
+  -- Audo keymapping
   {
-    "neovim/nvim-lspconfig",
-    ---@class PluginLspOpts
+    "folke/which-key.nvim",
+    event = "VeryLazy",
     opts = {
-      ---@type lspconfig.options
-      servers = {
-        -- pyright will be automatically installed
-        -- with mason and loaded with lspconfig
-        pyright = {},
-      },
+      plugins = { spelling = true },
     },
-  },
-  -- Use <tab> for completion and snippets (supertab)
-  -- first: disable default <tab> and <s-tab> behavior in LuaSnip
-  {
-    "L3MON4D3/LuaSnip",
-    keys = function()
-      return {}
-    end,
-  },
-  -- then: setup supertab in cmp
-  {
-    "hrsh7th/nvim-cmp",
-    dependencies = {
-      "hrsh7th/cmp-emoji",
-    },
-    ---@param opts cmp.ConfigSchema
-    opts = function(_, opts)
-      local has_words_before = function()
-        unpack = unpack or table.unpack
-        local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-        return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+    config = function(_, opts)
+      local wk = require("which-key")
+
+      wk.setup(opts)
+      local keymaps = {
+        mode = { "n", "v" },
+        ["g"] = { name = "+goto" },
+        ["gz"] = { name = "+surround" },
+        ["]"] = { name = "+next" },
+        ["["] = { name = "+prev" },
+        ["<leader><tab>"] = { name = "+tabs" },
+        ["<leader>b"] = { name = "+buffer" },
+        ["<leader>c"] = { name = "+code" },
+        ["<leader>d"] = { name = "+debug" },
+        ["<leader>f"] = { name = "+file/find" },
+        ["<leader>g"] = { name = "+git" },
+        ["<leader>gh"] = { name = "+hunks" },
+        ["<leader>q"] = { name = "+quit/session" },
+        ["<leader>s"] = { name = "+search" },
+        ["<leader>u"] = { name = "+ui" },
+        ["<leader>w"] = { name = "+windows" },
+        ["<leader>x"] = { name = "+diagnostics/quickfix" },
+      }
+      if Util.has("noice.nvim") then
+        keymaps["<leader>sn"] = { name = "+noice" }
       end
-
-      local luasnip = require("luasnip")
-      local cmp = require("cmp")
-
-      opts.mapping = vim.tbl_extend("force", opts.mapping, {
-        ["<Tab>"] = cmp.mapping(function(fallback)
-          if cmp.visible() then
-            cmp.select_next_item()
-            -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
-            -- they way you will only jump inside the snippet region
-          elseif luasnip.expand_or_jumpable() then
-            luasnip.expand_or_jump()
-          elseif has_words_before() then
-            cmp.complete()
-          else
-            fallback()
-          end
-        end, { "i", "s" }),
-        ["<S-Tab>"] = cmp.mapping(function(fallback)
-          if cmp.visible() then
-            cmp.select_prev_item()
-          elseif luasnip.jumpable(-1) then
-            luasnip.jump(-1)
-          else
-            fallback()
-          end
-        end, { "i", "s" }),
-      })
+      wk.register(keymaps)
     end,
   },
 }
