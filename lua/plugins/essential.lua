@@ -44,6 +44,7 @@ return {
     },
     config = function(_, opts)
       local wk = require("which-key")
+      local Util = require("lazyvim.util")
 
       wk.setup(opts)
       local keymaps = {
