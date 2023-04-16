@@ -2,25 +2,29 @@ local M = {}
 
 local function get_venv_python_path()
   local workspace_folder = vim.fn.getcwd()
-  local pyenv_virtual_env = os.getenv "VIRTUAL_ENV"
-  local python_path = pyenv_virtual_env .. "/bin/python"
 
   if vim.fn.executable(workspace_folder .. "/.venv/bin/python") then
     return workspace_folder .. "/.venv/bin/python"
   elseif vim.fn.executable(workspace_folder .. "/venv/bin/python") then
     return workspace_folder .. "/venv/bin/python"
-  elseif vim.fn.executable(python_path) then
-    return python_path
+  elseif vim.fn.executable(os.getenv("VIRTUAL_ENV") .. "/bin/python") then
+    return os.getenv("VIRTUAL_ENV" .. "/bin/python")
   else
     return "/usr/bin/python"
   end
 end
 
-function M.setup()
-  local dap = require "dap"
+local venv_python_path = get_venv_python_path()
+local debugpy_python_path = vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python"
 
-  local debugpy_path = vim.fn.stdpath "data" .. "/mason/bin/debugpy"
-  local venv_python_path = get_venv_python_path()
+function M.setup()
+  local dap = require("dap")
+
+  dap.adapters.python = {
+    type = "executable",
+    command = debugpy_python_path,
+    args = { "-m", "debugpy.adapter" },
+  }
 
   dap.configurations.python = {
     {
@@ -42,14 +46,12 @@ function M.setup()
       },
       console = "integratedTerminal",
       justMyCode = true,
-      env_python_path = venv_python_path,
+      pythonPath = venv_python_path,
     },
     {
       type = "python",
       request = "launch",
       name = "Python: Django Debug Single Test",
-      -- pythonPath = venv_python_path,
-      pythonPath = "${workspaceFolder}/.venv/bin/python",
       program = "${workspaceFolder}/manage.py",
       args = {
         "test",
@@ -57,15 +59,7 @@ function M.setup()
       },
       django = true,
       console = "integratedTerminal",
-    },
-  }
-
-  dap.adapters.python = {
-    type = "executable",
-    command = debugpy_path,
-    args = {
-      "-m",
-      "debugpy.adapter",
+      pythonPath = venv_python_path,
     },
   }
 end

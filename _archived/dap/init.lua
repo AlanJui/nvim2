@@ -1,12 +1,14 @@
 return {
-  "mfussenegger/nvim-dap",
+  "jay-babu/mason-nvim-dap.nvim",
   dependencies = {
-    { "theHamsta/nvim-dap-virtual-text" },
-    { "nvim-telescope/telescope-dap.nvim" },
-    { "jbyuki/one-small-step-for-vimkind" },
+    "williamboman/mason.nvim",
+    "mfussenegger/nvim-dap",
+    "theHamsta/nvim-dap-virtual-text",
+    "nvim-telescope/telescope-dap.nvim",
+    "jbyuki/one-small-step-for-vimkind",
+    "mfussenegger/nvim-dap-python",
     {
       "rcarriga/nvim-dap-ui",
-      tag = "v3.6.4",
       opts = {
         icons = { expanded = "▾", collapsed = "▸" },
         layouts = {
@@ -68,6 +70,8 @@ return {
     vim.fn.sign_define("DapBreakpointCondition", { text = "❓", texthl = "", linehl = "", numhl = "" })
     vim.fn.sign_define("DapLogPoint", { text = "💬", texthl = "", linehl = "", numhl = "" })
 
+    dapui.setup({})
+
     dap.listeners.after.event_initialized["dapui_config"] = function()
       dapui.open()
     end
@@ -79,9 +83,76 @@ return {
     end
 
     ------------------------------------------------------------------
-    -- set up debugger
-    ------------------------------------------------------------------
-    require("plugins.dap.python").setup()
-    require("plugins.dap.lua").setup()
+    local function get_venv_python_path()
+      local workspace_folder = vim.fn.getcwd()
+
+      if vim.fn.executable(workspace_folder .. "/.venv/bin/python") then
+        return workspace_folder .. "/.venv/bin/python"
+      elseif vim.fn.executable(workspace_folder .. "/venv/bin/python") then
+        return workspace_folder .. "/venv/bin/python"
+      elseif vim.fn.executable(os.getenv("VIRTUAL_ENV") .. "/bin/python") then
+        return os.getenv("VIRTUAL_ENV" .. "/bin/python")
+      else
+        return "/usr/bin/python"
+      end
+    end
+
+    local venv_python_path = get_venv_python_path()
+    local debugpy_python_path = vim.fn.stdpath("data") .. "/mason/bin/debugpy"
+
+    require("mason").setup()
+    require("mason-nvim-dap").setup({
+      ensure_installed = { "stylua", "jq", "python" },
+      handlers = {
+        function(source_name)
+          require("mason-nvim-dap.automatic_setup")(source_name)
+        end,
+        -- python = require("plugins.dap.python"),
+        python = function(config)
+          config.addapters = {
+            type = "executable",
+            command = debugpy_python_path,
+            args = { "-m", "debugpy.adapter" },
+          }
+
+          config.configuration = {
+            {
+              type = "python",
+              request = "launch",
+              name = "Python: Launch file",
+              program = "${file}", -- This configuration will launch the current file if used.
+              pythonPath = venv_python_path,
+            },
+            {
+              type = "python",
+              request = "launch",
+              name = "Python: Launch Django Server",
+              cwd = "${workspaceFolder}",
+              program = "${workspaceFolder}/manage.py",
+              args = {
+                "runserver",
+                "--noreload",
+              },
+              console = "integratedTerminal",
+              justMyCode = true,
+              pythonPath = venv_python_path,
+            },
+            {
+              type = "python",
+              request = "launch",
+              name = "Python: Django Debug Single Test",
+              program = "${workspaceFolder}/manage.py",
+              args = {
+                "test",
+                "${relativeFileDirname}",
+              },
+              django = true,
+              console = "integratedTerminal",
+              pythonPath = venv_python_path,
+            },
+          }
+        end,
+      },
+    })
   end,
 }
