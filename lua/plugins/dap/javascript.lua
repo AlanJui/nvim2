@@ -21,49 +21,72 @@ function M.setup()
 
   for _, language in ipairs({ "typescript", "javascript" }) do
     dap.configurations[language] = {
+      -- Node.js
       {
-        name = "Launch Chrome",
-        type = "pwa-chrome",
-        request = "launch",
-        url = "http://localhost:8080",
-        webRoot = "${workspaceFolder}",
-      },
-      {
-        name = "Launch file",
         type = "pwa-node",
         request = "launch",
+        name = "Launch file",
         program = "${file}",
         cwd = "${workspaceFolder}",
-        console = "integratedTerminal",
       },
       {
-        name = "Attach",
         type = "pwa-node",
         request = "attach",
+        name = "Attach",
         processId = require("dap.utils").pick_process,
         cwd = "${workspaceFolder}",
-        console = "integratedTerminal",
       },
+      -- Jest
       {
-        name = "Launch Program",
         type = "pwa-node",
         request = "launch",
-        skipFiles = {
-          "<node_internals>/**",
+        name = "Debug Jest Tests",
+        -- trace = true, -- include debugger info
+        runtimeExecutable = "node",
+        runtimeArgs = {
+          "./node_modules/jest/bin/jest.js",
+          "--runInBand",
         },
-        program = "${workspaceFolder}/bin/www",
+        rootPath = "${workspaceFolder}",
+        cwd = "${workspaceFolder}",
         console = "integratedTerminal",
+        internalConsoleOptions = "neverOpen",
       },
+      -- Mocha
       {
-        name = "Launch app.js",
         type = "pwa-node",
         request = "launch",
-        skipFiles = {
-          "<node_internals>/**",
+        name = "Debug Mocha Tests",
+        -- trace = true, -- include debugger info
+        runtimeExecutable = "node",
+        runtimeArgs = {
+          "./node_modules/mocha/bin/mocha.js",
         },
-        program = "${workspaceFolder}/app.js",
+        rootPath = "${workspaceFolder}",
+        cwd = "${workspaceFolder}",
         console = "integratedTerminal",
+        internalConsoleOptions = "neverOpen",
       },
+      -- {
+      --   name = "Launch Program",
+      --   type = "pwa-node",
+      --   request = "launch",
+      --   skipFiles = {
+      --     "<node_internals>/**",
+      --   },
+      --   program = "${workspaceFolder}/bin/www",
+      --   console = "integratedTerminal",
+      -- },
+      -- {
+      --   name = "Launch app.js",
+      --   type = "pwa-node",
+      --   request = "launch",
+      --   skipFiles = {
+      --     "<node_internals>/**",
+      --   },
+      --   program = "${workspaceFolder}/app.js",
+      --   console = "integratedTerminal",
+      -- },
     }
   end
 end
