@@ -1,7 +1,6 @@
 return {
   {
     "mfussenegger/nvim-dap",
-
     dependencies = {
       -- fancy UI for the debugger
       {
@@ -146,9 +145,6 @@ return {
       -- online, please don't ask me how to install them :)
       ensure_installed = {
         -- Update this to ensure that you have the debuggers for the langs you want
-        "debugpy",
-        "node-debu2-adapter",
-        "js-debug-adapter",
       },
     },
   },
@@ -195,18 +191,21 @@ return {
   -- JavaScript DAP
   {
     "mxsdev/nvim-dap-vscode-js",
-    opt = true,
-    build = "npm install --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out",
-    config = function()
-      require("plugins.dap.javascript").setup()
-    end,
+    dependencies = {
+      "microsoft/vscode-js-debug",
+      opt = true,
+      build = "npm install --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out",
+      config = function()
+        require("plugins.dap.javascript").setup()
+      end,
+    },
   },
   -- Node.js DAP
-  {
-    -- "microsoft/vscode-js-debug",
-    "microsoft/vscode-node-debug2",
-    config = function()
-      require("plugins.dap.node2").setup()
-    end,
-  },
+  -- {
+  --   -- "microsoft/vscode-js-debug",
+  --   "microsoft/vscode-node-debug2",
+  --   config = function()
+  --     require("plugins.dap.node2").setup()
+  --   end,
+  -- },
 }
