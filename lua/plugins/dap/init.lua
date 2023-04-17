@@ -10,26 +10,26 @@ return {
       -- tag = "v3.6.4",
       opts = {
         icons = { expanded = "▾", collapsed = "▸" },
-        layouts = {
-          {
-            elements = {
-              "scopes",
-              "breakpoints",
-              "stacks",
-              "watches",
-            },
-            -- size = 80,
-            -- position = "right",
-          },
-          {
-            elements = {
-              "repl",
-              "console",
-            },
-            -- size = 10,
-            -- position = "bottom",
-          },
-        },
+        -- layouts = {
+        --   {
+        --     elements = {
+        --       "scopes",
+        --       "breakpoints",
+        --       "stacks",
+        --       "watches",
+        --     },
+        --     size = 80,
+        --     position = "right",
+        --   },
+        --   {
+        --     elements = {
+        --       "repl",
+        --       "console",
+        --     },
+        --     size = 10,
+        --     position = "bottom",
+        --   },
+        -- },
       },
     },
   },
