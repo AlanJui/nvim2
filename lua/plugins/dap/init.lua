@@ -1,12 +1,13 @@
 return {
   "mfussenegger/nvim-dap",
   dependencies = {
+    { "mfussenegger/nvim-dap-python" },
+    { "mxsdev/nvim-dap-vscode-js" },
     { "theHamsta/nvim-dap-virtual-text" },
     { "nvim-telescope/telescope-dap.nvim" },
-    { "jbyuki/one-small-step-for-vimkind" },
     {
       "rcarriga/nvim-dap-ui",
-      tag = "v3.6.4",
+      -- tag = "v3.6.4",
       opts = {
         icons = { expanded = "▾", collapsed = "▸" },
         layouts = {
@@ -17,16 +18,16 @@ return {
               "stacks",
               "watches",
             },
-            size = 80,
-            position = "right",
+            -- size = 80,
+            -- position = "right",
           },
           {
             elements = {
               "repl",
               "console",
             },
-            size = 10,
-            position = "bottom",
+            -- size = 10,
+            -- position = "bottom",
           },
         },
       },
@@ -81,7 +82,7 @@ return {
     ------------------------------------------------------------------
     -- set up debugger
     ------------------------------------------------------------------
-    require("plugins.dap.python").setup()
-    require("plugins.dap.lua").setup()
+    require("plugins.dap.python").setup(dap)
+    require("plugins.dap.lua").setup(dap)
   end,
 }

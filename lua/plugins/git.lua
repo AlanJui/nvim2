@@ -11,7 +11,7 @@ return {
     },
     keys = {
       {
-        "<leader>gm",
+        "<leader>gn",
         "<cmd>Neogit<cr>",
         desc = "My Neogit",
       },
