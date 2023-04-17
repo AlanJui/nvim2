@@ -5,8 +5,9 @@ end
 
 local M = {}
 
-function M.setup(dap)
-  -- local dap = require "dap"
+function M.setup()
+  local dap = require("dap")
+
   dap_adapter.setup({
     -- Path of node executable. Defaults to $NODE_PATH, and then "node"
     -- node_path = node_path,
