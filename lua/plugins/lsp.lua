@@ -122,11 +122,33 @@ return {
   {
     "jose-elias-alvarez/null-ls.nvim",
     event = { "BufReadPre", "BufNewFile" },
-    dependencies = { "mason.nvim" },
-    opts = function()
+    -- dependencies = { "mason.nvim" },
+    config = function()
       local nls = require("null-ls")
-      return {
-        root_dir = require("null-ls.utils").root_pattern(".null-ls-root", ".neoconf.json", "Makefile", ".git"),
+      local lsp_format_augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+
+      local nls_on_attach = function(current_client, bufnr)
+        -- to setup format on save
+        if current_client.supports_method("textDocument/formatting") then
+          vim.api.nvim_clear_autocmds({ group = lsp_format_augroup, buffer = bufnr })
+          vim.api.nvim_create_autocmd("BufWritePre", {
+            group = lsp_format_augroup,
+            buffer = bufnr,
+            callback = function()
+              vim.lsp.buf.format({
+                filter = function(client) -- luacheck: ignore
+                  --  only use null-ls for formatting instead of lsp server
+                  return client.name == "null-ls"
+                end,
+                bufnr = bufnr,
+              })
+            end,
+          })
+        end
+      end
+
+      nls.setup({
+        on_attach = nls_on_attach,
         sources = {
           -- nls.builtins.formatting.fish_indent,
           -- nls.builtins.diagnostics.fish,
@@ -169,93 +191,40 @@ return {
             extra_filetypes = {},
           }),
         },
-      }
-    end,
-    config = function()
-      local null_ls = require("null-ls")
-      local helpers = require("null-ls.helpers")
-
-      local markdownlint = {
-        method = null_ls.methods.DIAGNOSTICS,
-        filetypes = { "markdown" },
-        -- null_ls.generator creates an async source
-        -- that spawns the command with the given arguments and options
-        generator = null_ls.generator({
-          command = "markdownlint",
-          args = { "--stdin" },
-          to_stdin = true,
-          from_stderr = true,
-          -- choose an output format (raw, json, or line)
-          format = "line",
-          check_exit_code = function(code, stderr)
-            local success = code <= 1
-
-            if not success then
-              -- can be noisy for things that run often (e.g. diagnostics), but can
-              -- be useful for things that run on demand (e.g. formatting)
-              print(stderr)
-            end
-
-            return success
-          end,
-          -- use helpers to parse the output from string matchers,
-          -- or parse it manually with a function
-          on_output = helpers.diagnostics.from_patterns({
-            {
-              pattern = [[:(%d+):(%d+) [%w-/]+ (.*)]],
-              groups = { "row", "col", "message" },
-            },
-            {
-              pattern = [[:(%d+) [%w-/]+ (.*)]],
-              groups = { "row", "message" },
-            },
-          }),
-        }),
-      }
-
-      null_ls.register(markdownlint)
-    end,
-  },
-  -- mason-null-ls
-  {
-    "jay-babu/mason-null-ls.nvim",
-    event = { "BufReadPre", "BufNewFile" },
-    dependencies = {
-      "williamboman/mason.nvim",
-      "jose-elias-alvarez/null-ls.nvim",
-    },
-    opts = {},
-    config = function()
-      require("mason-null-ls").setup({
-        automatic_setup = false,
-        automatic_installation = true,
-        ensure_installed = {
-          "stylua",
-          "prettier",
-          "pylint",
-          "pydocstyle",
-          -- "autopep8",
-          "black",
-          "flake8",
-          "isort",
-          "djhtml",
-          "djlint",
-          "markdownlint",
-          "zsh",
-          "shellcheck",
-          "jq",
-        },
       })
     end,
   },
-  -- add symbols-outline
-  {
-    "simrat39/symbols-outline.nvim",
-    cmd = "SymbolsOutline",
-    keys = { { "<leader>cs", "<cmd>SymbolsOutline<cr>", desc = "Symbols Outline" } },
-    opts = {
-      -- add your options that should be passed to the setup() function here
-      position = "right",
-    },
-  },
 }
+-- mason-null-ls
+-- {
+--   "jay-babu/mason-null-ls.nvim",
+--   event = { "BufReadPre", "BufNewFile" },
+--   dependencies = {
+--     "williamboman/mason.nvim",
+--     "jose-elias-alvarez/null-ls.nvim",
+--   },
+--   opts = {},
+--   config = function()
+--     require('mason').setup()
+--     require("mason-null-ls").setup({
+--       automatic_setup = false,
+--       automatic_installation = true,
+--       ensure_installed = {
+--         "stylua",
+--         "prettier",
+--         "pylint",
+--         "pydocstyle",
+--         -- "autopep8",
+--         "black",
+--         "flake8",
+--         "isort",
+--         "djhtml",
+--         "djlint",
+--         "markdownlint",
+--         "zsh",
+--         "shellcheck",
+--         "jq",
+--       },
+--     })
+--   end,
+-- }
