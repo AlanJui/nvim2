@@ -1,4 +1,27 @@
 return {
+  -- add any tools you want to have installed below
+  {
+    "williamboman/mason.nvim",
+    opts = {
+      ensure_installed = {
+        "stylua",
+        "prettier",
+        -- "autopep8",
+        "pylint",
+        "pydocstyle",
+        "flake8",
+        "isort",
+        "black",
+        "djlint",
+        "markdownlint",
+        "shellcheck",
+        "shfmt",
+        "jq",
+        -- "djhtml",
+        -- "zsh",
+      },
+    },
+  },
   -- add LSP Server  to lspconfig
   {
     "neovim/nvim-lspconfig",
@@ -150,11 +173,21 @@ return {
       nls.setup({
         on_attach = nls_on_attach,
         sources = {
-          -- nls.builtins.formatting.fish_indent,
-          -- nls.builtins.diagnostics.fish,
+          -- YAML/JSON
+          nls.builtins.diagnostics.spectral,
+          nls.builtins.diagnostics.yamllint,
+          nls.builtins.formatting.jq,
+          nls.builtins.formatting.fixjson,
+          -- Lua Script
+          nls.builtins.formatting.stylua,
+          -- Shell / ZSH
+          nls.builtins.diagnostics.zsh,
+          nls.builtins.diagnostics.shellcheck,
+          nls.builtins.formatting.shfmt,
+          -- Python
+          nls.builtins.diagnostics.pyproject_flake8,
           nls.builtins.diagnostics.flake8,
           nls.builtins.diagnostics.pylint.with({
-            command = "pylint",
             -- extra_args = { "--load-plugins", "pylint_django" },
             -- init_options = {
             --     "init-hook='import sys; import os; from pylint.config import find_pylintrc; sys.path.append(os.path.dirname(find_pylintrc()))'",
@@ -165,14 +198,17 @@ return {
           }),
           nls.builtins.diagnostics.mypy.with({
             extra_args = { "--config-file", "pyproject.toml" },
-            -- extra_args = { "--config-file", "mypy.ini" },
-            -- extra_args = { "--config-file", "setup.cfg" },
-            -- cwd = function(_) return vim.fn.getcwd() end,
-            -- runtime_condition = function(params) return utils.path.exists(params.bufname) end,
           }),
-          nls.builtins.formatting.shfmt,
-          nls.builtins.formatting.stylua,
+          nls.builtins.formatting.isort,
           nls.builtins.formatting.black,
+          nls.builtins.formatting.djhtml,
+          nls.builtins.formatting.djlint,
+          -- Markdown
+          nls.builtins.formatting.markdown_toc,
+          nls.builtins.formatting.markdownlint,
+          -- Web Tools
+          nls.builtins.diagnostics.stylelint,
+          nls.builtins.formatting.eslint,
           nls.builtins.formatting.prettier.with({
             filetypes = {
               "html",
@@ -195,36 +231,3 @@ return {
     end,
   },
 }
--- mason-null-ls
--- {
---   "jay-babu/mason-null-ls.nvim",
---   event = { "BufReadPre", "BufNewFile" },
---   dependencies = {
---     "williamboman/mason.nvim",
---     "jose-elias-alvarez/null-ls.nvim",
---   },
---   opts = {},
---   config = function()
---     require('mason').setup()
---     require("mason-null-ls").setup({
---       automatic_setup = false,
---       automatic_installation = true,
---       ensure_installed = {
---         "stylua",
---         "prettier",
---         "pylint",
---         "pydocstyle",
---         -- "autopep8",
---         "black",
---         "flake8",
---         "isort",
---         "djhtml",
---         "djlint",
---         "markdownlint",
---         "zsh",
---         "shellcheck",
---         "jq",
---       },
---     })
---   end,
--- }
