@@ -1,4 +1,6 @@
 return {
+  -- library used by other plugins
+  { "nvim-lua/plenary.nvim", lazy = true },
   -- better diagnostics list and others
   {
     "folke/trouble.nvim",
@@ -63,6 +65,7 @@ return {
         ["<leader>q"] = { name = "+quit/session" },
         ["<leader>s"] = { name = "+search" },
         ["<leader>u"] = { name = "+ui" },
+        ["<leader>U"] = { name = "+utilities" },
         ["<leader>w"] = { name = "+windows" },
         ["<leader>x"] = { name = "+diagnostics/quickfix" },
       }

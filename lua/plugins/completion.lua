@@ -13,7 +13,13 @@ return {
   {
     "rafamadriz/friendly-snippets",
     config = function()
-      require("luasnip.loaders.from_vscode").lazy_load()
+      -- require("luasnip.loaders.from_vscode").lazy_load()
+      require("luasnip.loaders.from_vscode").lazy_load({
+        paths = {
+          vim.fn.stdpath("config") .. "/my-snippets",
+          vim.fn.stdpath("data") .. "/lazy/friendly-snippets",
+        },
+      })
     end,
   },
 
