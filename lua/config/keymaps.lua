@@ -123,7 +123,7 @@ map("n", "<leader>gg", function() Util.float_term({ "lazygit" }, { cwd = Util.ge
 map("n", "<leader>gG", function() Util.float_term({ "lazygit" }) end, { desc = "Lazygit (cwd)" })
 
 -- quit
-map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit all" })
+map("n", "<leader>sq", "<cmd>qa<cr>", { desc = "Quit all" })
 
 -- highlights under cursor
 if vim.fn.has("nvim-0.9.0") == 1 then
@@ -142,6 +142,14 @@ map("n", "<leader>w-", "<C-W>s", { desc = "Split window below" })
 map("n", "<leader>w|", "<C-W>v", { desc = "Split window right" })
 map("n", "<leader>-", "<C-W>s", { desc = "Split window below" })
 map("n", "<leader>|", "<C-W>v", { desc = "Split window right" })
+
+map("n", "<leader>wm", "<CMD>MaximizerToggle<CR>", { desc = "Max/Org Window" })
+map("n", "<leader>wc", "<CMD>close<CR>", { desc = "Close Window" })
+map("n", "<leader>wi", "<CMD>tabnew %<CR>", { desc = "Zoom-in Window" })
+map("n", "<leader>wo", "<CMD>tabclose<CR>", { desc = "Zoom-out Window" })
+map("n", "<leader>wh", "<CMD>split<CR>", { desc = "H-Split" })
+map("n", "<leader>wv", "<CMD>vsplit<CR>", { desc = "V-Split" })
+map("n", "<leader>w=", "<C-w>=", { desc = "Equal Width" })
 
 -- tabs
 map("n", "<leader><tab>l", "<cmd>tablast<cr>", { desc = "Last Tab" })
