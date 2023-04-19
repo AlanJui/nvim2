@@ -199,7 +199,7 @@ map("n", "<M-Right>", "<cmd>wincmd ><CR>")
 --------------------------------------------------------------------
 
 -- Tab navigation
-map("n", "to", ":tabnew<CR>") -- open new tab
-map("n", "tx", ":tabclose<CR>") -- close current tab
-map("n", "tn", ":tabn<CR>") --  go to next tab
-map("n", "tp", ":tabp<CR>") --  go to previous tab
+-- map("n", "to", ":tabnew<CR>") -- open new tab
+-- map("n", "tx", ":tabclose<CR>") -- close current tab
+-- map("n", "tn", ":tabn<CR>") --  go to next tab
+-- map("n", "tp", ":tabp<CR>") --  go to previous tab
