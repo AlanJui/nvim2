@@ -26,14 +26,20 @@ return {
         ["<leader>gh"] = { name = "+hunks" },
         ["<leader>q"] = { name = "+quit/session" },
         ["<leader>s"] = { name = "+search" },
-        ["<leader>u"] = { name = "+ui" },
-        ["<leader>U"] = { name = "+utilities" },
-        ["<leader>w"] = { name = "+windows" },
-        ["<leader>x"] = { name = "+diagnostics/quickfix" },
-        ["\\"] = {
-          ":Vifm<cr>",
-          desc = "Files Manager",
+        ["<leader>u"] = { name = "+utilities" },
+        ["<leader>uu"] = { name = "+ui" },
+        ["<leader>w"] = {
+          name = "+windows",
+          { "<leader>wm", "<CMD>MaximizerToggle<CR>", desc = "Max/Org Window" },
+          { "<leader>wc", "<CMD>close<CR>", desc = "Close Window" },
+          { "<leader>wi", "<CMD>tabnew %<CR>", desc = "Zoom-in Window" },
+          { "<leader>wo", "<CMD>tabclose<CR>", desc = "Zoom-out Window" },
+          { "<leader>wh", "<CMD>split<CR>", desc = "H-Split" },
+          { "<leader>wv", "<CMD>vsplit<CR>", desc = "V-Split" },
+          { "<leader>w=", "<C-w>=", desc = "Equal Width" },
         },
+        ["<leader>x"] = { name = "+diagnostics/quickfix" },
+        ["<leader>z"] = { name = "+system" },
       }
       if Util.has("noice.nvim") then
         keymaps["<leader>sn"] = { name = "+noice" }

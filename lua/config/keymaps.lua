@@ -163,8 +163,6 @@ map("i", "jk", "<Esc>")
 -- Split window
 map("n", "<localleader>sh", ":split<CR>")
 map("n", "<localleader>sv", ":vsplit<CR>")
-map("n", "<localleader>se", "<C-w>=") -- make split windows equal width & height
-map("n", "<localleader>sx", ":close<CR>") -- close current split window
 
 -- Move focus on window
 map("n", "<ESC>k", "<cmd>wincmd k<CR>")
@@ -183,33 +181,17 @@ map("n", "<ESC>l", "<cmd>wincmd l<CR>")
 -- map("n", "<S-Right>", "<cmd>wincmd l<CR>")
 
 -- Window Resize
-map("n", "<M-Up>", "<cmd>wincmd -<CR>")
-map("n", "<M-Down>", "<cmd>wincmd +<CR>")
-map("n", "<M-Left>", "<cmd>wincmd <<CR>")
+map("n", "<M-Up>",    "<cmd>wincmd -<CR>")
+map("n", "<M-Down>",  "<cmd>wincmd +<CR>")
+map("n", "<M-Left>",  "<cmd>wincmd <<CR>")
 map("n", "<M-Right>", "<cmd>wincmd ><CR>")
-
--- Window Zoom In/Out
-map("n", "<C-w>i", ":tabnew %<CR>")
-map("n", "<C-w>o", ":tabclose<CR>")
-
--- maximizer window
-map("n", "<localleader>sm", ":MaximizerToggle<CR>") -- close current split window
 
 --------------------------------------------------------------------
 -- Buffers
 --------------------------------------------------------------------
 
 -- Tab navigation
-map("n", "<localleader>to", ":tabnew<CR>") -- open new tab
-map("n", "<localleader>tx", ":tabclose<CR>") -- close current tab
-map("n", "<localleader>tn", ":tabn<CR>") --  go to next tab
-map("n", "<localleader>tp", ":tabp<CR>") --  go to previous tab
-
--- Tab operations
-map("n", "gt", "<cmd>bn<CR>")
-map("n", "gT", "<cmd>bp<CR>")
-
---------------------------------------------------------------------
--- Terminal mode
---------------------------------------------------------------------
-map("t", "<Esc>", "<C-\\><C-n>")
+map("n", "to", ":tabnew<CR>") -- open new tab
+map("n", "tx", ":tabclose<CR>") -- close current tab
+map("n", "tn", ":tabn<CR>") --  go to next tab
+map("n", "tp", ":tabp<CR>") --  go to previous tab

@@ -26,9 +26,9 @@ return {
     cmd = "Telescope",
     keys = {
       -- disable the keymap to grep files
-      { "<leader>/", false },
+      -- { "<leader>/", false },
       -- change a keymap
-      { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find Files" },
+      -- { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find Files" },
       -- add a keymap to browse plugin files
       {
         "<leader>fp",
@@ -37,39 +37,39 @@ return {
         end,
         desc = "Find Plugin File",
       },
-      -- { "<leader><space>", require("utils").find_files, desc = "Find Files" },
-      -- { "<leader>ff", require("utils").find_files, desc = "Find Files" },
-      -- { "<leader>fo", "<cmd>Telescope frecency theme=dropdown previewer=false<cr>", desc = "Recent" },
-      -- { "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Buffers" },
-      -- { "<leader>fr", "<cmd>Telescope file_browser<cr>", desc = "Browser" },
-      -- { "<leader>gc", "<cmd>Telescope conventional_commits<cr>", desc = "Conventional Commits" },
-      -- { "<leader>zs", "<cmd>Telescope lazy<cr>", desc = "Search Plugins" },
-      -- { "<leader>ps", "<cmd>Telescope repo list<cr>", desc = "Search" },
-      -- { "<leader>hs", "<cmd>Telescope help_tags<cr>", desc = "Search" },
-      -- {
-      --   "<leader>pp",
-      --   function()
-      --     require("telescope").extensions.project.project({ display_type = "minimal" })
-      --   end,
-      --   desc = "List",
-      -- },
-      -- { "<leader>sw", "<cmd>Telescope live_grep<cr>", desc = "Workspace" },
-      -- { "<leader>ss", "<cmd>Telescope luasnip<cr>", desc = "Snippets" },
-      -- {
-      --   "<leader>sb",
-      --   function()
-      --     require("telescope.builtin").current_buffer_fuzzy_find()
-      --   end,
-      --   desc = "Buffer",
-      -- },
-      -- { "<leader>vo", "<cmd>Telescope aerial<cr>", desc = "Code Outline" },
-      -- {
-      --   "<leader>zc",
-      --   function()
-      --     require("telescope.builtin").colorscheme({ enable_preview = true })
-      --   end,
-      --   desc = "Colorscheme",
-      -- },
+      { "<leader><space>", require("utils").find_files, desc = "Find Files" },
+      { "<leader>co", "<cmd>Telescope aerial<cr>", desc = "Code Outline" },
+      { "<leader>zs", "<cmd>Telescope lazy<cr>", desc = "Search Plugins" },
+      {
+        "<leader>uuc",
+        function()
+          require("telescope.builtin").colorscheme({ enable_preview = true })
+        end,
+        desc = "Colorscheme",
+      },
+      {
+        "<leader>up",
+        function()
+          require("telescope").extensions.project.project({ display_type = "minimal" })
+        end,
+        desc = "List projects",
+      },
+      { "<leader>ff", require("utils").find_files, desc = "Find Files" },
+      { "<leader>fo", "<cmd>Telescope frecency theme=dropdown previewer=false<cr>", desc = "Recent" },
+      { "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Buffers" },
+      { "<leader>fr", "<cmd>Telescope file_browser<cr>", desc = "Browser" },
+      { "<leader>gc", "<cmd>Telescope conventional_commits<cr>", desc = "Conventional Commits" },
+      { "<leader>gl", "<cmd>Telescope repo list<cr>", desc = "List Git Repo" },
+      { "<leader>sh", "<cmd>Telescope help_tags<cr>", desc = "Search Help Tags" },
+      { "<leader>sw", "<cmd>Telescope live_grep<cr>", desc = "Workspace Live Grep" },
+      { "<leader>ss", "<cmd>Telescope luasnip<cr>", desc = "Snippets" },
+      {
+        "<leader>sb",
+        function()
+          require("telescope.builtin").current_buffer_fuzzy_find()
+        end,
+        desc = "Buffer",
+      },
     },
     config = function()
       local telescope = require("telescope")
