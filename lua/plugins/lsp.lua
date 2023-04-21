@@ -40,11 +40,16 @@ return {
             },
           },
         },
+        -- https://github.com/microsoft/pyright/blob/main/docs/settings.md
         pyright = {
           filetypes = { "python" },
           settings = {
+            pyright = {},
             python = {
               analysis = {
+                diagnosticSeverityOverrides = {
+                  reportUnusedImport = "none",
+                },
                 autoSearchPaths = true,
                 diagnosticMode = "workspace",
                 useLibraryCodeForTypes = true,
@@ -185,7 +190,6 @@ return {
           nls.builtins.diagnostics.shellcheck,
           nls.builtins.formatting.shfmt,
           -- Python
-          nls.builtins.diagnostics.pyproject_flake8,
           nls.builtins.diagnostics.flake8,
           nls.builtins.diagnostics.pylint.with({
             -- extra_args = { "--load-plugins", "pylint_django" },
